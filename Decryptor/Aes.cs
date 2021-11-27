@@ -17,7 +17,7 @@ namespace Decryptor
 
             Aes aesAlg = Aes.Create();
             aesAlg.Key = Key;
-            aesAlg.IV = IV;
+
             var plainBytes = aesAlg.DecryptCbc(cipherText, IV);
             return plainBytes;
         }

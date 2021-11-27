@@ -27,13 +27,9 @@ var randBytes = endBytes.Skip(0x10).Take(0x10).ToArray();
 
 var encryData = bcdFileBytes.Skip(0x10).Take(dataSize).ToArray();
 var keyBytes = RandKey.GetRandKey(randBytes);
-var ivBytes = endBytes.Take(4).ToArray();
-var ivRealBytes = new byte[16];
-ivRealBytes[0] = ivBytes[0];
-ivRealBytes[4] = ivBytes[1];
-ivRealBytes[8] = ivBytes[2];
-ivRealBytes[12] = ivBytes[3];
-var decrypData = AesUtil.AESDecrypt(encryData, keyBytes, ivRealBytes);
+var ivBytes = endBytes.Take(0x10).ToArray();
+
+var decrypData = AesUtil.AESDecrypt(encryData, keyBytes, ivBytes);
 
 File.WriteAllBytes(output, decrypData);
 
