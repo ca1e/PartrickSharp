@@ -17,19 +17,11 @@ if (new FileInfo(input).Length != 0x5C000)
 	return;
 }
 
+Console.WriteLine($"Decrypting course {input}...");
+
 var bcdFileBytes = File.ReadAllBytes(input);
 
-var dataSize = 0x5C000 - 0x40;
-var endOffset = 0x5C000 - 0x30;
-
-var endBytes = bcdFileBytes.Skip(endOffset);
-var randBytes = endBytes.Skip(0x10).Take(0x10).ToArray();
-
-var encryData = bcdFileBytes.Skip(0x10).Take(dataSize).ToArray();
-var keyBytes = RandKey.GetRandKey(randBytes);
-var ivBytes = endBytes.Take(0x10).ToArray();
-
-var decrypData = AesUtil.AESDecrypt(encryData, keyBytes, ivBytes);
+var decrypData = Encryption.Decrypt(bcdFileBytes);
 
 File.WriteAllBytes(output, decrypData);
 
