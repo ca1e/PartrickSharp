@@ -24,7 +24,8 @@
 		0xCCDF0CE9, 0x50E4135C, 0xFF2658B2, 0x3780F156,
 		0x7D8F5D68, 0x517CBED1, 0x1FCDDF0D, 0x77A58C94
 		};
-		static uint[] RandInit(byte[] data)
+
+		static uint[] generateState(byte[] data)
 		{
 			var in1 = BitConverter.ToUInt32(data, 0);
 			var in2 = BitConverter.ToUInt32(data, 4);
@@ -34,13 +35,13 @@
 			var cond = (in1 | in2 | in3 | in4) != 0;
 
 			return new uint[]{
-		cond ? in1: 1,
-		cond ? in2: 0x6C078967,
-		cond ? in3: 0x714ACB41,
-		cond ? in4: 0x48077044 };
+			cond ? in1: 1,
+			cond ? in2: 0x6C078967,
+			cond ? in3: 0x714ACB41,
+			cond ? in4: 0x48077044 };
 		}
 
-		static uint RandGen(ref uint[] rand_state)
+		static uint generateRand(ref uint[] rand_state)
 		{
 			uint n = rand_state[0] ^ rand_state[0] << 11;
 			rand_state[0] = rand_state[1];
@@ -51,7 +52,7 @@
 			return n;
 		}
 
-		static uint[] GenKey(ref uint[] rand)
+		static uint[] generateKeyState(ref uint[] rand)
 		{
 			uint[] outKey = new uint[4] { 0, 0, 0, 0 };
 			for (int i = 0; i < STATE_SIZE; i++)
@@ -59,8 +60,8 @@
 				for (int j = 0; j < NUM_ROUNDS; j++)
 				{
 					outKey[i] <<= 8;
-					var idx1 = RandGen(ref rand) >> 26;
-					var idx2 = RandGen(ref rand) >> 27;
+					var idx1 = generateRand(ref rand) >> 26;
+					var idx2 = generateRand(ref rand) >> 27;
 					var idx3 = idx2 & 24;
 					var idx4 = course_key_table[idx1] >> (int)idx3;
 					outKey[i] |= idx4 & 0xFF;
@@ -69,17 +70,20 @@
 			return outKey;
 		}
 
-		public static byte[] GetRandKey(byte[] data)
-        {
-			var randState = RandInit(data);
-			var keyState = GenKey(ref randState);
-
-			byte[] key = BitConverter.GetBytes(keyState[0])
+		static byte[] generateKey(uint[] keyState)
+		{
+			return BitConverter.GetBytes(keyState[0])
 				.Concat(BitConverter.GetBytes(keyState[1]))
 				.Concat(BitConverter.GetBytes(keyState[2]))
 				.Concat(BitConverter.GetBytes(keyState[3])).ToArray();
+		}
 
-			return key;
+		public static byte[] GetRandKey(byte[] data)
+        {
+			var randState = generateState(data);
+			var keyState = generateKeyState(ref randState);
+
+			return generateKey(keyState);
 		}
 	}
 }

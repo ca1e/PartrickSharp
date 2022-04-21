@@ -6,6 +6,47 @@
     internal class AesUtil
     {
         private static bool Invert = true; // Used on invertable functions
+        
+        public static byte[] Encrypt(byte[] buf, byte[] key, byte[] iv,
+             Mode mode = Mode.CBC, Padding padding = Padding.PKCS7)
+        {
+            if (mode == Mode.CBC)
+            {
+                if (iv == null || iv.Length < 16)
+                    return null;
+            }
+            int keysize = key.Length * 8;
+            if ((keysize != 128) & (keysize != 192) & (keysize != 256))
+                return null;
+            uint[] ek = ExpandKey(key, keysize);
+            var bin = new MemoryStream(PadBuffer(buf, 16, padding));
+            var bout = new MemoryStream();
+            var block = new byte[16];
+            int c;
+            byte[,] state;
+            byte[] cblock = iv;
+            while ((c = bin.Read(block, 0, 16)) > 0)
+            {
+                switch (mode)
+                {
+                    case Mode.ECB:
+                        state = LoadState(block);
+                        EncryptBlock(state, ek, keysize);
+                        bout.Write(DumpState(state), 0, c);
+                        break;
+                    case Mode.CBC:
+                        block = XorBytes(block, cblock);
+                        state = LoadState(block);
+                        EncryptBlock(state, ek, keysize);
+                        cblock = DumpState(state);
+                        bout.Write(cblock, 0, c);
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            return bout.ToArray();
+        }
 
         public static byte[] Decrypt(byte[] buf, byte[] key, byte[] iv,
             Mode mode = Mode.CBC, Padding padding = Padding.PKCS7)

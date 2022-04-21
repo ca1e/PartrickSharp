@@ -21,7 +21,7 @@ Console.WriteLine($"Decrypting course {input}...");
 
 var bcdFileBytes = File.ReadAllBytes(input);
 
-var decrypData = Encryption.Decrypt(bcdFileBytes);
+var decrypData = Encryption.DecryptCourse(bcdFileBytes);
 
 File.WriteAllBytes(output, decrypData);
 
