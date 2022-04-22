@@ -1,8 +1,8 @@
 ﻿namespace PartrickSharp
 {
-    internal class Encryption
+    public class Encryption
     {
-        const string courseMagic = "SCDL";
+        private const string courseMagic = "SCDL";
 
         public static byte[] DecryptCourse(byte[] course)
         {

@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "Decryptor": {
-      "commandName": "Project",
-      "commandLineArgs": "D:\\repositories\\smm2\\Decryptor\\Demo\\course_data_120.bcd 111"
-    }
-  }
-}

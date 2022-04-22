@@ -4,7 +4,7 @@ namespace PartrickSharp
     /// CRC 效验
     /// 快速检测算法
     /// </summary>
-    public sealed class CRC32
+    internal sealed class CRC32
     {
 
         static UInt32[] crcTable = {
