@@ -1,4 +1,4 @@
-﻿namespace Decryptor
+﻿namespace PartrickSharp
 {
     internal class RandKey
 	{
@@ -78,10 +78,12 @@
 				.Concat(BitConverter.GetBytes(keyState[3])).ToArray();
 		}
 
-		public static byte[] GetRandKey(byte[] data)
+		public static byte[] GetRandKey(byte[] data, out byte[]cmacKey)
         {
 			var randState = generateState(data);
 			var keyState = generateKeyState(ref randState);
+			var cmacKeyState = generateKeyState(ref randState);
+			cmacKey = generateKey(cmacKeyState);
 
 			return generateKey(keyState);
 		}

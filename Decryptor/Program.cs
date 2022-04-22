@@ -1,6 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using Decryptor;
+using PartrickSharp;
 
 if (args.Length != 2)
 {
@@ -22,7 +22,9 @@ Console.WriteLine($"Decrypting course {input}...");
 var bcdFileBytes = File.ReadAllBytes(input);
 
 var decrypData = Encryption.DecryptCourse(bcdFileBytes);
+var encryptedData = Encryption.EncryptCourse(decrypData);
 
 File.WriteAllBytes(output, decrypData);
+File.WriteAllBytes($"{output}.ren", encryptedData);
 
 Console.WriteLine("Done!");

@@ -1,4 +1,4 @@
-﻿namespace Decryptor
+﻿namespace PartrickSharp
 {
     internal class Encryption
     {
@@ -34,14 +34,38 @@
                 throw new ArgumentException($"Invalid course magic. got {magic}");
             }
 
-            var keyBytes = RandKey.GetRandKey(stateSeed);
+            var keyBytes = RandKey.GetRandKey(stateSeed, out var cmacKey);
+            var decrypted = AesUtil.Decrypt(encrypted, keyBytes, iv);
 
-            return AesUtil.Decrypt(encrypted, keyBytes, iv);
+            var crcCalced = CRC32.GetCRC32(decrypted);
+            var cmacCalced = AesUtil.AESCMAC(cmacKey, decrypted);
+
+            if(BitConverter.ToString(cmacCalced) != BitConverter.ToString(cmac))
+            {
+                throw new InvalidDataException($"Invalid AES-CMAC. got {BitConverter.ToString(cmacCalced)}");
+            }
+
+            if(crcCalced != crc)
+            {
+                throw new InvalidDataException($"Invalid CRC32. got {crcCalced}");
+            }
+
+            return decrypted;
         }
 
         public static byte[] EncryptCourse(byte[] raw)
         {
-            uint crc32 = 0;
+            var rand = new Random(Environment.TickCount);
+            var iv = new byte[0x10];
+            var stateSeed = new byte[0x10];
+            rand.NextBytes(iv);
+            rand.NextBytes(stateSeed);
+
+            var keyBytes = RandKey.GetRandKey(stateSeed, out var cmacKey);
+            var encrypted = AesUtil.Encrypt(raw, keyBytes, iv, Mode.CBC, Padding.NONE);
+            
+            uint crc32 = CRC32.GetCRC32(raw);
+            var cmac = AesUtil.AESCMAC(cmacKey, raw);
 
             using var stream = new MemoryStream();
             stream.Write(BitConverter.GetBytes((uint)0x1));
@@ -49,11 +73,10 @@
             stream.Write(BitConverter.GetBytes((ushort)0x0));
             stream.Write(BitConverter.GetBytes(crc32));
             stream.Write(System.Text.Encoding.Default.GetBytes(courseMagic)); // magic
-            // TODO
-            //stream.Write(encrypted);
-            //stream.Write(iv);
-            //stream.Write(stateSeed);
-            //stream.Write(cmac);
+            stream.Write(encrypted);
+            stream.Write(iv);
+            stream.Write(stateSeed);
+            stream.Write(cmac);
             return stream.ToArray();
         }
     }
