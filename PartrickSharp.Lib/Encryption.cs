@@ -2,7 +2,7 @@
 {
     public class Encryption
     {
-        private const string courseMagic = "SCDL";
+        private const string course_MAGIC = "SCDL";
 
         public static byte[] DecryptCourse(byte[] course)
         {
@@ -17,9 +17,15 @@
             var stateSeed = new byte[0x10];
             var cmac = new byte[0x10];
 
+            /// <summary>
+            /// <see cref="https://github.com/0Liam/smm2-documentation"/>
+            /// </summary>
             stream.Read(header);
+            // 0 on 1.0.0/1.0.1 courses, 1 on 1.0.2
             var formatVersion = BitConverter.ToUInt32(header, 0);
+            // 1=Quest, 8=Network, 10=Later, 11=Save, 16=Course
             var fileType = BitConverter.ToInt16(header, 0x4);
+            // Usually 0/1 for Courses
             var unKnown =  BitConverter.ToInt16(header, 0x6);
             var crc = BitConverter.ToUInt32(header, 0x8);
             var magic = System.Text.Encoding.Default.GetString(header[0xc..0x10]);
@@ -29,7 +35,7 @@
             stream.Read(stateSeed);
             stream.Read(cmac);
 
-            if(fileType == 0x10 && magic != courseMagic)
+            if(fileType == 0x10 && magic != course_MAGIC)
             {
                 throw new ArgumentException($"Invalid course magic. got {magic}");
             }
@@ -72,7 +78,7 @@
             stream.Write(BitConverter.GetBytes((ushort)0x10)); // fileType
             stream.Write(BitConverter.GetBytes((ushort)0x0));
             stream.Write(BitConverter.GetBytes(crc32));
-            stream.Write(System.Text.Encoding.Default.GetBytes(courseMagic)); // magic
+            stream.Write(System.Text.Encoding.Default.GetBytes(course_MAGIC)); // magic
             stream.Write(encrypted);
             stream.Write(iv);
             stream.Write(stateSeed);
