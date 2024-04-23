@@ -1,4 +1,7 @@
+using System.Runtime.InteropServices;
+
 namespace PartrickSharp;
+
 struct Course
 {
     byte StartY;
@@ -11,8 +14,8 @@ struct Course
     byte LSDay;
     byte LSHour;
     byte LSMinute;
-    byte AutoScrollSpeed;
-    byte ClearConditionCat;
+    byte AutoScrollSpeed; //Custom Autoscroll Speed
+    byte ClearConditionCat; //Clear Condition Category
     uint ClearConditionCRC32;
     uint GameVersion;
     uint ManagementFlags;
@@ -20,14 +23,14 @@ struct Course
     uint ClearCheckTime;
     uint CreationID;
     ulong UploadID;
-    uint ClearCheckGameVer;
-    // 0xBC
+    uint ClearCheckGameVer; //Clear Check Game Version
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst =0xBC)]
     byte[] Reserved;
-    byte unknown; // usually 0xFF
-    // 0x3
+    byte Unknown; //usually 0xFF
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst =0x3)]
     byte[] GameStyle;
-    // x42
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst =0x42)]
     byte[] Name;
-    // 0xCA
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst =0xCA)]
     byte[] Description;
 }
