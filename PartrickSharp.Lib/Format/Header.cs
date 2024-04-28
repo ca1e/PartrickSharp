@@ -2,12 +2,12 @@ using System.Runtime.InteropServices;
 
 namespace PartrickSharp;
 
-struct CourseHeader
+public struct CourseHeader
 {
-    byte StartY;
-    byte GoalY;
+    public byte StartY;
+    public byte GoalY;
     ushort GoalX;
-    ushort Timer;
+    public ushort Timer;
     ushort CCA; //Clear Condition Amount
     ushort LSYear; //Last Saved Year
     byte LSMonth;
@@ -22,7 +22,7 @@ struct CourseHeader
     uint ClearCheckAttempts;
     uint ClearCheckTime;
     uint CreationID;
-    ulong UploadID;
+    public ulong UploadID;
     uint ClearCheckGameVer; //Clear Check Game Version
     [MarshalAs(UnmanagedType.ByValArray, SizeConst =0xBC)]
     byte[] Reserved;
@@ -35,7 +35,7 @@ struct CourseHeader
     byte[] Description;
 }
 
-struct AreaHeader
+public struct AreaHeader
 {
     byte Theme;
     byte AutoscrollType;

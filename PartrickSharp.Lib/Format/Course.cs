@@ -1,8 +1,8 @@
 namespace PartrickSharp;
 
-struct Course
+public struct Course
 {
-    CourseHeader Header;
-    CourseArea MainArea;
-    CourseArea SubArea;
+    public CourseHeader Header;
+    public CourseArea MainArea;
+    public CourseArea SubArea;
 }

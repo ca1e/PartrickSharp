@@ -22,6 +22,8 @@ Console.WriteLine($"Decrypting course {input}...");
 var bcdFileBytes = File.ReadAllBytes(input);
 
 var decrypData = Encryption.DecryptCourse(bcdFileBytes);
+var CI = CourseSMM2.BytesToStructure<Course>(decrypData);
+Console.WriteLine($"{CI}");
 var encryptedData = Encryption.EncryptCourse(decrypData);
 
 File.WriteAllBytes(output, decrypData);
