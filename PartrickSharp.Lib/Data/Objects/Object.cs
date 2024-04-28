@@ -1,25 +1,25 @@
 namespace PartrickSharp;
 
-struct CourseObject
+public struct CourseObject
 {
-    uint XPosition;
-    uint YPosition;
+    public uint XPosition;
+    public uint YPosition;
     ushort Reserved;
     byte Width;
     byte Height;
     uint Flags;
     uint ChhildFlags;
     uint ExtendedData;
-    ushort ID;
+    public ushort ID;
     ushort ChihldID;
     ushort LinkID;
     ushort SoundEffectID;
 }
 
-struct SoundEffect
+public struct SoundEffect
 {
-    byte ID;
-    byte XPosition;
-    byte YPosition;
+    public  byte ID;
+    public byte XPosition;
+    public byte YPosition;
     byte Reserved;
 }

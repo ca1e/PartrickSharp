@@ -2,14 +2,8 @@
 
 using PartrickSharp;
 
-if (args.Length != 2)
-{
-	Console.WriteLine($"Usage: decryptor <input> <output>");
-	return;
-}
-
-string input = args[0];
-string output = args[1];
+string input = "/Users/ca1e/Downloads/FR8WSVJMG";
+string output = "/Users/ca1e/Downloads/test";
 
 if (new FileInfo(input).Length != 0x5C000)
 {
@@ -22,8 +16,13 @@ Console.WriteLine($"Decrypting course {input}...");
 var bcdFileBytes = File.ReadAllBytes(input);
 
 var decrypData = Encryption.DecryptCourse(bcdFileBytes);
-var CI = CourseSMM2.BytesToStructure<Course>(decrypData);
-Console.WriteLine($"{CI}");
+var CI = DecodeUtil.ConverBytesToStructure<Course>(decrypData);
+Console.WriteLine($"{CI.Header.StartY}. GV:{CI.Header.ClearCheckGameVer}");
+
+Console.WriteLine($"game style: {CI.Header.GameVersion:B}");
+Console.WriteLine($"Timer: {CI.Header.Timer}");
+Console.WriteLine($"Theme: {CI.MainArea.Header.Theme}");
+
 var encryptedData = Encryption.EncryptCourse(decrypData);
 
 File.WriteAllBytes(output, decrypData);

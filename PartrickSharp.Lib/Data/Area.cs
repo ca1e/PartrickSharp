@@ -4,21 +4,21 @@ namespace PartrickSharp;
 
 public struct CourseArea
 {
-    AreaHeader Header;
+    public AreaHeader Header;
     [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 2600, ArraySubType = UnmanagedType.Struct)]
-    CourseObject[] Objects;
+    public CourseObject[] Objects;
     [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 300, ArraySubType = UnmanagedType.Struct)]
-    SoundEffect[] SoundEffect;
+    public SoundEffect[] SoundEffect;
     [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 5, ArraySubType = UnmanagedType.Struct)]
-    SnakeBlock[] SnakeBlock;
+    public SnakeBlock[] SnakeBlock;
     [MarshalAs(UnmanagedType.ByValArray, SizeConst =0xE420)]
     byte[] ClearPipe; //0x124 * 200
     [MarshalAs(UnmanagedType.ByValArray, SizeConst =0x348)]
     byte[] PiranhaCreeper; //0x54 * 10
     [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 10, ArraySubType = UnmanagedType.Struct)]
-    BlockInfo[] ExclamationBlock;
+    public BlockInfo[] ExclamationBlock;
     [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 10, ArraySubType = UnmanagedType.Struct)]
-    BlockInfo[] TrackBlock;
+    public BlockInfo[] TrackBlock;
     [MarshalAs(UnmanagedType.ByValArray, SizeConst =0x3E80)]
     byte[] Ground; //0x4 * 4000
     [MarshalAs(UnmanagedType.ByValArray, SizeConst =0x4650)]

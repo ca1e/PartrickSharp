@@ -2,37 +2,37 @@ using System.Runtime.InteropServices;
 
 namespace PartrickSharp;
 
-struct SnakeBlock
+public struct SnakeBlock
 {
-    byte Index;
-    byte NodeCount;
+    public byte Index;
+    public byte NodeCount;
     byte Unknown; //1
     byte Reserved;
     [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 120, ArraySubType = UnmanagedType.Struct)]
-    SnakeBlockNode[] Node;
+    public SnakeBlockNode[] Node;
 }
 
-struct SnakeBlockNode
+public struct SnakeBlockNode
 {
-    ushort Index;
-    ushort Direction;
+    public ushort Index;
+    public ushort Direction;
     ushort Unknown;
     ushort Reserved;
 }
 
-struct BlockInfo
+public struct BlockInfo
 {
     byte Unknown; //1
-    byte Index;
-    byte NodeCount;
+    public byte Index;
+    public byte NodeCount;
     byte Reserved;
     [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 10, ArraySubType = UnmanagedType.Struct)]
-    BlockNode[] Node;
+    public BlockNode[] Node;
 }
 
-struct BlockNode
+public struct BlockNode
 {
     byte Unknown; //1
-    byte Direction;
+    public byte Direction;
     ushort Reserved;
 }
